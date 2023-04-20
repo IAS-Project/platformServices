@@ -34,49 +34,22 @@ send_whatsapp_notification(to_number, message, account_sid, auth_token)
 #------------------send message completed---------------------
 #------------------send emails started ------------------------
 
-emails = [
-    {
-        "email": "gandhisanya99@gmail.com",
-        "Sub": "sorry guys ignore maro",
-        "Body": {
-            "name": "Load Balancer",
-            "Containerid": "122",
-            "VMhost": "1212"
-        },
-        "status": "killed"
-    },
-    {
-        "email": "yashsampat23154@gmail.com",
-        "Sub": "sorry guys ignore maro",
-        "Body": {
-            "name": "Web Server",
-            "Containerid": "234",
-            "VMhost": "5678"
-        },
-        "status": "exceeded"
-    }
-]
-
-
-def send_mail(sender_email , receiver_email,password,sub, body):
+def send(sender_email , receiver_email, password, sub = "", body = ""):
+    #sender_email : email of sender
+    #receiver_email : email of receiver
+    #password prefer this link to generate  https://support.google.com/mail/answer/185833?hl=en
     message = f"Subject: {sub} \n\n{body}"
-    '''# message += f"Name of subsystem is {body['name']}\n"
-    # message += f"Container id  is {body['Containerid']}\n"
-    # message += f"VMhost  is {body['VMhost']}\n\n"
-    # message += 'This is a testing message now it worked,\n tell the changes and the format' 
-    #create connection'''
     try:
         server = smtplib.SMTP('smtp.gmail.com')
         #start TLS
         server.starttls()
-        # print('Connectin made successfully')
-
         try:
             server.login(sender_email, password)
             # print('Login successful to server')
         except Exception as e:
             print(f"Error: {str(e)}")
             print("Failed to login. Please check your credentials and try again.")
+            print("Generate less secure key, Check it out https://support.google.com/mail/answer/185833?hl=en")
             return
             
         try:
@@ -97,12 +70,21 @@ def send_mail(sender_email , receiver_email,password,sub, body):
     except Exception as e:
         print(f"Error {str(e)}")
         print("Failed to connect to Smtp. Please check internet connectivity")
+        
+def send_mail(sender_email , receiver_email, password, sub = "Welcome buddies", body = "Thanks for using our platform, please check the code,\n updated in github"):
+    #Broadcasting message to all if it is a list
+    if isinstance(receiver_email, list):
+        for receiver in receiver_email:
+            # Send email to each receiver
+            send(sender_email , receiver, password, sub, body)
+    else:
+        # Send email to single receiver
+        send(sender_email , receiver_email, password, sub, body)
+         
     
-for email in emails:
-    sender_email = sender_email
-    password = sender_psw
-    receiver_email = email["email"]
-    subject = email["Sub"]
-    body = f"Name: {email['Body']['name']}\nContainer ID: {email['Body']['Containerid']}\nVM Host: {email['Body']['VMhost']}\nStatus: {email['status']}"
-    send_mail(sender_email, receiver_email, password, subject, body)
-    # print(body)
+x = ["gandhisanya99@gmail.com", "lokeshsharma123456@gmail.com","yashsampat23154@gmail.com"]
+y = "lokeshsharma123456@gmail.com"
+for i in range(0,5):
+    send_mail(sender_email, x, sender_psw)
+
+ 
