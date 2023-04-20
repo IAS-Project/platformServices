@@ -82,9 +82,8 @@ def send_mail(sender_email , receiver_email, password, sub = "Welcome buddies", 
         send(sender_email , receiver_email, password, sub, body)
          
     
-x = ["gandhisanya99@gmail.com", "lokeshsharma123456@gmail.com","yashsampat23154@gmail.com"]
-y = "lokeshsharma123456@gmail.com"
-for i in range(0,5):
-    send_mail(sender_email, x, sender_psw)
+# x = ["gandhisanya99@gmail.com", "lokeshsharma123456@gmail.com","yashsampat23154@gmail.com"]
+# y = "lokeshsharma123456@gmail.com"
+send_mail(sender_email, x, sender_psw)
 
  
