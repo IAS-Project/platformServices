@@ -1,17 +1,16 @@
-#for whatsapp services 
-# !pip install twilio
-# from twilio.rest import Client
-# !pip install smtplib
+
 import smtplib
 #for email services
 #email of sender and password 
 #its a random generated password from google account
 #it has to be done manually
-sender_email = "sharmameritnation@gmail.com"
-sender_psw = 'pkjvtsmvofuqpjaz'
+sender_email = "sharmameritnation@gmail.com" #this is constant
+sender_psw = 'pkjvtsmvofuqpjaz' #this is constant
 #------------till now manual otherwise a function for
 #------------taking arguments is required
-'''
+
+from twilio.rest import Client
+
 def send_whatsapp_notification(to_number, message, account_sid, auth_token):
     client = Client(account_sid, auth_token)
 
@@ -23,18 +22,21 @@ def send_whatsapp_notification(to_number, message, account_sid, auth_token):
 
     print(f"WhatsApp notification sent to {to_number}, Message SID: {message.sid}")
 
-to_number = '+917021794108'
+# If you wish to change the 'to_number', make sure you send 'join appearance-stove' to '+14155238886'
+to_number = '+919887903310'
 message = "Hello, this is a notification message!"
-
+# Account has been already created. So, use the following
 account_sid = "ACef0a0280e62b5f9afeb8707d73b3053d"
 auth_token = "66ec1a3be77bfc9446a246839b4f7ac0"
 
+
+# For testing purposes
 send_whatsapp_notification(to_number, message, account_sid, auth_token)
-'''
+
 #------------------send message completed---------------------
 #------------------send emails started ------------------------
 
-def send(sender_email , receiver_email, password, sub = "", body = ""):
+def send(sender_email ,receiver_email, password, sub = "", body = ""):
     #sender_email : email of sender
     #receiver_email : email of receiver
     #password prefer this link to generate  https://support.google.com/mail/answer/185833?hl=en
@@ -84,6 +86,6 @@ def send_mail(sender_email , receiver_email, password, sub = "Welcome buddies", 
     
 # x = ["gandhisanya99@gmail.com", "lokeshsharma123456@gmail.com","yashsampat23154@gmail.com"]
 # y = "lokeshsharma123456@gmail.com"
-send_mail(sender_email, x, sender_psw)
+# send_mail(sender_email, x, sender_psw)
 
  
