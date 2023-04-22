@@ -30,41 +30,34 @@ send_whatsapp_notification(senderName ,to_number, message, account_sid, auth_tok
 
 #------------------------End code for WhatsApp-----------------
 
-
-#------------------Start code for Email ------------------------
-# In order to access mail services, call 'send_mail' function
-# Parameters:
-# 1. Sender email address
-# 2. Receiver email address
-# 3. Your app password
-## Generate app password by following the steps below:
-#       Go to your google account
-#       Go to security
-#       Go to 2- step verification
-#       Create an 'App password' and use the password here
-#       Add Subject string
-#       Add message body
-
-def send_mail(sender_email , receiver_email, password, sub = "Welcome buddies", body = "Thanks for using our platform, please check the code,\n updated in github"):
-    #Broadcasting message to all if it is a list
+ 
+def send_mail(sender_email, sender_password, receiver_email, cc=None, bcc=None, sub="hi ", body="ignore me"):
+    # Broadcasting message to all if it is a list
     if isinstance(receiver_email, list):
         for receiver in receiver_email:
             # Send email to each receiver
-            send(sender_email , receiver, password, sub, body)
+            send(sender_email,sender_password, receiver, cc, bcc,sub, body)
     else:
         # Send email to single receiver
-        send(sender_email , receiver_email, password, sub, body)
-         
+        send(sender_email, sender_password, receiver_email, cc, bcc,sub, body)
 
 
-def send(sender_email ,receiver_email, password, sub = "", body = ""):
-    #sender_email : email of sender
-    #receiver_email : email of receiver
-    #password prefer this link to generate  https://support.google.com/mail/answer/185833?hl=en
-    message = f"Subject: {sub} \n\n{body}"
+def send(sender_email, sender_password, receiver_email, cc=None, bcc=None, sub="hi ", body="ignore me"):
+    message = f"From: {sender_email}\nTo: {receiver_email}\n"
+    if cc:
+        if isinstance(cc, list):
+            message += f"Cc: {','.join(cc)}\n"
+        else:
+            message += f"Cc: {cc}\n"
+    if bcc:
+        if isinstance(bcc, list):
+            message += f"Bcc: {','.join(bcc)}\n"
+        else:
+            message += f"Bcc: {bcc}\n"
+    message += f"Subject: {sub}\n\n{body}"
     try:
         server = smtplib.SMTP('smtp.gmail.com')
-        #start TLS
+        # start TLS
         server.starttls()
         try:
             server.login(sender_email, password)
@@ -74,12 +67,23 @@ def send(sender_email ,receiver_email, password, sub = "", body = ""):
             print("Failed to login. Please check your credentials and try again.")
             print("Generate less secure key, Check it out https://support.google.com/mail/answer/185833?hl=en")
             return
-            
+
         try:
             # Send the email
-            result = server.sendmail(sender_email, receiver_email, message)
+            to_list = [receiver_email]
+            if cc:
+                if isinstance(cc, list):
+                    to_list += cc
+                else:
+                    to_list.append(cc)
+            if bcc:
+                if isinstance(bcc, list):
+                    to_list += bcc
+                else:
+                    to_list.append(bcc)
+            result = server.sendmail(sender_email, to_list, message)
             if not result:
-                print(f'message send successfully to {receiver_email}')
+                print(f'message sent successfully to {receiver_email}')
             else:
                 print(f'Failed to send email to {result.keys()}')
 
@@ -88,13 +92,8 @@ def send(sender_email ,receiver_email, password, sub = "", body = ""):
             print("Failed to send email. Please check the email addresses provided and try again.")
             return
         finally:
-            #close the connection
+            # close the connection
             server.quit()
     except Exception as e:
         print(f"Error {str(e)}")
-        print("Failed to connect to Smtp. Please check internet connectivity")
-
-
-        
-
- 
+        print("Failed to connect to SMTP. Please check internet connectivity")
